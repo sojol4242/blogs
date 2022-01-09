@@ -3,28 +3,29 @@ import { Link } from "react-router-dom";
 
 const NewsCard = ({ news }) => {
  
-  const { dateLong,image, author, title, summery, url } = news;
-  console.log(dateLong);
+  const { content ,imageUrl, author, title} = news;
+ 
+ 
   return (
     <div className="max-w-sm mx-auto bg-white rounded-xl shadow-md overflow-hidden">
       {/*max-w-sm mx-auto  bg-white rounded-xl shadow-md */}
       <div className="flex flex-col flex-wrap md:flex xs:">
         <div className="shrink md:shrink-0">
-          <img src={image} alt={title} />
+          {/* className="w-full h-16" */}
+          <img className="max-h-32 w-full"  src={imageUrl?news.imageUrl:"https://i.ibb.co/XxXM3wZ/360-F-434728286-OWQQv-AFo-XZLd-GHl-Obozsol-Neu-Sxhpr84.jpg"} alt={title} />
         </div>
         <div className="p-8">
           <div className="uppercase tracking-wide text-sm text-cyan-500 font-semibold">
             {author}
           </div>
-          <a
-            href={url}
+          <h4
+          
             className="block mt-1 text-lg leading-tight font-medium text-black hover:underline"
           >
             {title}.
-          </a>
+          </h4>
           <p className="mt-2 text-gray-500">
-            {summery}
-            <svg
+            {content.slice(0,98)}<svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
               fill="none"
@@ -38,11 +39,12 @@ const NewsCard = ({ news }) => {
                 d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
               />
             </svg>
+            
           </p>
-          <Link to={`/newsDetails/${dateLong}`}
+          <Link to={`/newsDetails/${author}`}
 
-            type="button"
-            className="g-gradient-to-r from-blue-600 to-blue-500 hover:from-cyan-500 hover:to-cyan-300 text-white px-3 py-2 mt-6 rounded-md transition duration-150 ease-out hover:ease-in font-bold uppercase text-xs flex justify-center align-center"
+          
+            className="w-32 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-cyan-500 hover:to-cyan-300 text-white px-3 py-2 mt-6 rounded-md transition duration-150 ease-out hover:ease-in font-bold uppercase text-xs  flex justify-center items-center"
           >
             Read More{" "}
             <svg

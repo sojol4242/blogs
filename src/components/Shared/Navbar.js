@@ -87,11 +87,11 @@ const Navbar = () => {
           <div className="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
             <div className="flex justify-start lg:w-0 lg:flex-1">
               <Link to="/">
-                <span className="sr-only">Workflow</span>
+                {/* <span className="sr-only">Workflow</span> */}
                 <img
                   className="h-8 w-auto sm:h-10"
-                  src="https://tailwindui.com/img/logos/workflow-mark-cyan-600.svg"
-                  alt=""
+                  src="https://i.ibb.co/VWfy7n7/icons8-google-news-64.png"
+                  alt="logo"
                 />
               </Link>
             </div>

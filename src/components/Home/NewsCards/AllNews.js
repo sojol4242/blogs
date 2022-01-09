@@ -1,60 +1,74 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import Navbar from '../../Shared/Navbar';
-import Spinner from '../../Shared/Spinner';
-import NewsCard from './NewsCard';
+import React, { useContext, useEffect, useState } from "react";
+import Navbar from "../../Shared/Navbar";
+import Spinner from "../../Shared/Spinner";
+import FilterNews from "./FilterNews";
+import MenuButton from "./MenuButton";
+import { v4 as uuid4 } from "uuid";
+import { DataContext } from "../../../App";
+import NewsCard from "./NewsCard";
 
 const AllNews = () => {
-  const [news, setNews] = useState([]);
+  const newsData = useContext(DataContext);
+  const [categories, setCategories] = useState([]);
+  const [filterNews, setFilterNews] = useState([]);
+
+  // make filterable menu
   useEffect(() => {
-    const options = {
-      method: "GET",
-      url: "https://newsx.p.rapidapi.com/search",
-      params: { limit: "10", skip: "0" },
-      headers: {
-        "x-rapidapi-host": "newsx.p.rapidapi.com",
-        "x-rapidapi-key": "8c3fe34780mshb566ab307ab601dp1dfa42jsn4b0fd3073888",
-      },
-    };
-    axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data);
-        setNews(response.data)
-      })
-      .catch(function (error) {
-        console.error(error);
-    
-      });
+    const allCategories = [
+      "all",
+      ...new Set(newsData.news.slice(0, 6).map((item) => item.author)),
+    ];
+    setCategories(allCategories);
   }, []);
-    return (
-      
-      <>
-      <Navbar/>
-      
+
+  const filterItems = (category) => {
+    if (category === "all") {
+      setFilterNews(newsData.news);
+      return;
+    } else {
+      const newNews = newsData.news.filter((item) => item.author === category);
+      setFilterNews(newNews);
+    }
+    
+  };
+ 
+  return (
+    <>
+      <Navbar />
+
       <div className="container  flex flex-col justify-center items-center my-10 mx-auto md:container md:mx-auto xs:mx-auto">
-        <div className="my-10 sm:text-center lg:text-center">
-          <h1 className="text-4xl tracking-tight  uppercase font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-            <span className="block xl:inline">Explore</span>{" "}
-            <span className="block text-cyan-600 xl:inline">News</span>
-          </h1>
+        <div>
+          <div className="mt-8 sm:text-center lg:text-center">
+            <h1 className="text-4xl tracking-tight  uppercase font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+              <span className="block xl:inline">Explore</span>{" "}
+              <span className="block text-cyan-600 xl:inline">News</span>
+            </h1>
+          </div>
+          <div className="my-12 flex justify-around items-center">
+            {categories.map((category) => (
+              <MenuButton
+                items={category}
+                key={uuid4}
+                filterItems={filterItems}
+              />
+            ))}
+          </div>
         </div>
-        {news.length > 0 ? (
+
+        {newsData.news.length > 0 ? (
           <>
-            <div className="container p-4 max-w-full grid gap-4 xs:max-auto  xs:grid-cols-1 xs:p-8 md:grid-cols-2 lg:gap-6 lg:grid-cols-3 xl:grid-cols-3">
-              {news.map((element, index) => (
-                <NewsCard news={element} key={index} />
-              ))}
+        
+            <div className="container">
+           
+                 <div className={`${filterNews?"p-4 max-w-full grid gap-4 xs:max-auto  xs:grid-cols-1 xs:p-8 md:grid-cols-2 lg:gap-6 lg:grid-cols-3 xl:grid-cols-3":"none"}`}><FilterNews filterNews={filterNews} /> </div>
             </div>
-   
           </>
         ) : (
           <Spinner />
-          // max-w-sm mx-auto  bg-white rounded-xl shadow-md   sm:flex sm:items-center
         )}
-      </div></>
-        
-    );
+      </div>
+    </>
+  );
 };
 
 export default AllNews;
